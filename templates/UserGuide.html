@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TrackIt!</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+	<header>
+		<h1><center>TrackIt!</center></h1>
+	</header>
+	<nav>
+		<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="About.html">About</a></li>
+			<li><a href="UserGuide.html">User Guide</a></li>
+			<li><a href="LeagueOfLegends.html">League of Legends</a></li>
+			<li><a href="Apex.html">Apex Legends</a></li>
+			<li><a href="Steam.html">Steam</a></li>
+			<li><a href="Mojang.html">Mojang</a></li>
+			<li><a href="Roblox.html">ROBLOX</a></li>
+			<li><a href="Valorant.html">Valorant</a></li>
+			<li><a href="Overwatch.html">Overwatch</a></li>
+		</ul>
+	  </nav>
+	<main>
+		<section>
+			<h1><center>User Guide</center></h1>
+			<a id="leagueUserGuide"><h2>League of Legends</h2></a>
+			<p>Our League of Legends API takes the user's summoner name and region to then display the user's playtime hours, summoner icon, ranked data, top 5 champion mastery, and account level on a webpage on our website.</p>
+			<p>A list of applicable region codes is listed below:</p>
+			<p>Brazil: BR1</p>
+			<p>Europe Nordic & East: EUN1</p>
+			<p>Europe West: EUW1</p>
+			<p>Latin America North: LA1</p>
+			<p>Latin America South: LA2</p>
+			<p>North America: NA1</p>
+			<p>Oceania: OCE/OC1</p>
+			<p>Russia: RU1</p>
+			<p>Turkey: TR1</p>
+			<p>Japan: JP1</p>
+			<p>Korea: KR</p>
+			<p>The Philippines: PH2</p>
+			<p>Singapore, Malaysia, & Indonesia: SG2</p>
+			<p>Taiwan, Hong Kong, and Macao: TW2</p>
+			<p>Thailand: TH2</p>
+			<p>Vietnam: VN2</p>
+			<p>Public Beta Environment: PBE</p>
+			<p>Example of summoner name and region:</p>
+			<p>lixtah na1</p>
+
+			<a id="valorantUserGuide"><h2>Valorant</h2></a>
+			<p>Our Valorant API takes the user's riot ID (username and tag) to then display their player card and banner, along with their KDA (kill to death to assist ratio) over the past 20 matches.</p>
+			<p>Example of a Valorant riot ID:</p>
+			<p>lixtah#4444</p>     
+
+			<a id="apexUserGuide"><h2>Apex Legends</h2></a>
+			<p>Our Apex Legends API takes the user's username and platform to then display their total kills, matches played, and approximate playtime hours of each legend (character). After all legends are displayed, it will show the user their lifetime kills, lifetime matches played, and total playtime based on an average of 15 minutes per game.</p>
+			<p>Platform Codes:</p>
+			<p>PC: origin</p>
+      		<p>Playstation: psn</p>
+
+			<p>Example of Username and Platform:</p>
+			<p>lixtah psn</p>
+			
+			<a id="overwatchUserGuide"><h2>Overwatch</h2></a>
+			<p>Our Overwatch API takes the user's username, tag, platform, and region, and then displays their quickplay wins and losses, their competitive wins and loses, and their playtime on each.
+			<p>Example of Overwatch username, tag, platform, and region:</p>
+			<p>lixtah 1821 pc us</p>
+
+			<a id="steamUserGuide"><h2>Steam</h2></a>
+			<p>Our Steam API takes the user's Steam ID and then games they own and their respective play times.</p>
+			<p>You can get your steam ID by going to online version of your steam profile and using the end of the url.</p>
+			<p>Example of Steam ID</p>
+			<p>76561197960434622</p>
+			
+			<a id="minecraftUserGuide"><h2>Mojang</h2></a>
+			<p>Our Mojang API takes the user's Minecraft email, username, and password to then display a 3D rendered model of your Minecraft skin, along with a downloadable skin and cape file. It will then tell you when the account was created.</p>
+			<p>Example of Minecraft email, username, and password:</p>
+			<p>abc123@gmail.com abc123 ilovetogame#21</p>
+
+			<a id="robloxUserGuide"><h2>Roblox</h2></a>
+			<p>Our Roblox API takes the user's account ID and displays their 3D character model, favorite games, and total badges earned. The account ID can be found by logging in to their Roblox account, going to their profile page, and then checking the link of the profile page that should include an 8-number long ID.</p>
+			<p>Example of Roblox ID:</p>
+			<p>25447559</p>
+		</section>
+	</main>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TrackIt!</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<style>
+		.blue-button {
+		  background-color: #4c9ed9;
+		  color: white;
+		  padding: 10px 20px;
+		  border: none;
+		  border-radius: 5px;
+		  font-size: 20px;
+		  cursor: pointer;
+		}
+		.image-container {
+			margin-top: 20px;
+			text-align: center;
+		}
+	  </style>
+</head>
+<body>
+	<header>
+		<h1><center>TrackIt!</center></h1>
+	</header>
+	<nav>
+		<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="About.html">About</a></li>
+			<li><a href="UserGuide.html">User Guide</a></li>
+			<li><a href="LeagueOfLegends.html">League of Legends</a></li>
+			<li><a href="Apex.html">Apex Legends</a></li>
+			<li><a href="Steam.html">Steam</a></li>
+			<li><a href="Mojang.html">Mojang</a></li>
+			<li><a href="Roblox.html">ROBLOX</a></li>
+			<li><a href="Valorant.html">Valorant</a></li>
+			<li><a href="Overwatch.html">Overwatch</a></li>
+		</ul>
+	  </nav>
+ <main>
+		<section>
+			<h2><center>Welcome to the ROBLOX Tracker!</center></h2>
+				<form method="POST" action="{{ url_for('roblox.getRobloxID') }}">		
+					<p><center><label for="user-input">Enter your ROBLOX Username:</label>		
+					<input type="text" id="user-id" name="user-id"></center></p>
+					<div style="text-align:center;">
+						<button type="submit" class="blue-button">Submit</button>
+					</div>
+				</form>
+				<div class="image-container"><center><img src="{{ url_for('static', filename='images/roblox.jpg') }}" width="500" height="300"></center></div>
+				<h2>Need Help?</h2>
+			</section>
+			<center><button class="blue-button" onclick="window.location.href='UserGuide.html#robloxUserGuide'">Go to Roblox User Guide</button></center>
+		</main>
+	</body>
+	</html>			

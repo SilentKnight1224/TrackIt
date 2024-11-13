@@ -1,0 +1,43 @@
+<html>
+<head>
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+		<h1><center>TrackIt!</center></h1>
+	</header>
+	<nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+    <li><a href="About.html">About</a></li>
+	<li><a href="UserGuide.html">User Guide</a></li>
+	<li><a href="LeagueOfLegends.html">League of Legends</a></li>
+    <li><a href="Apex.html">Apex Legends</a></li>
+    <li><a href="Steam.html">Steam</a></li>
+    <li><a href="Mojang.html">Mojang</a></li>
+    <li><a href="Roblox.html">ROBLOX</a></li>
+	<li><a href="Valorant.html">Valorant</a></li>
+	<li><a href="Overwatch.html">Overwatch</a></li>
+    </ul>
+  </nav>
+<main>
+  <section>
+  <center>
+  <h1>{{ heading }}</h1>
+  {% for legend, stats in legend_stats.items() %}
+  <p><b>{{ legend }}</b></p>
+  <p>Kills: {{ stats["kills"] }}</p>
+  <p>Winning Kills: {{ stats["winning_kills"] }}</p>
+  <p>Matches Played: {{ stats["matches_played"] }}</p>
+  {% endfor %}
+  <h2>Overall Stats:</h2>
+  <p>Total Kills: {{ overall_stats["total_kills"] }}</p>
+  <p>Total Matches Played: {{ overall_stats["total_matches_played"] }}</p>
+  <p>Approximate Playtime Minutes: {{ overall_stats["approximate_playtime_minutes"] }}</p>
+  </center>
+</section>
+</main>
+
+</body>
+</html>

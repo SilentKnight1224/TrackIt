@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Register{% endblock %}</h1>
+{% endblock %}
+
+{% macro input(id='username', name='username', type='text') %}
+  <form>
+    <label for="fname">First name:</label><br>
+    <input type="{{ type }}" id="{{ id }}" name="{{ name }}"> 
+  </form>
+{% endmacro %}
+
+{% block content %}
+  <form method="post" action="{{ url_for('account.register') }}">
+    <label for="username">Username</label>
+    <input name="username" id="username" required>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
+    <input type="submit" value="Register">
+  </form>
+{% endblock %}
+
+{% block additional_content %}
+  {{ input() }}
+{% endblock %}  

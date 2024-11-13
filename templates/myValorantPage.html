@@ -1,0 +1,33 @@
+<html>
+<head>
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+		<h1><center>TrackIt!</center></h1>
+	</header>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+    <li><a href="About.html">About</a></li>
+	<li><a href="UserGuide.html">User Guide</a></li>
+	<li><a href="LeagueOfLegends.html">League of Legends</a></li>
+    <li><a href="Apex.html">Apex Legends</a></li>
+    <li><a href="Steam.html">Steam</a></li>
+    <li><a href="Mojang.html">Mojang</a></li>
+    <li><a href="Roblox.html">ROBLOX</a></li>
+	<li><a href="Valorant.html">Valorant</a></li>
+	<li><a href="Overwatch.html">Overwatch</a></li>
+    </ul>
+  </nav>
+  <main>
+  <center>
+    <h1>{{ heading }}</h1>
+    <img src="{{ img }}">
+    <p>{{accountLevel}}</p>
+    <p>{{estimate}}</p>
+</center>
+</main>
+</body>
+</html>

@@ -1,0 +1,75 @@
+body {
+	background-color: #e6f2ff;
+	color: #333;
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+/* styles for the header element */
+header {
+	background-color: white;
+	padding: 20px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* styles for the h1 element */
+h1 {
+	font-size: 36px;
+	margin: 0;
+}
+
+/* styles for the nav element */
+nav {
+	background-color: #66b3ff;
+	padding: 10px;
+	margin-top: 10px;
+	overflow: auto;
+}
+
+/* styles for the nav anchor elements */
+nav a {
+	display: block;
+	float: left;
+	color: white;
+	text-decoration: none;
+	padding: 10px;
+}
+
+/* styles for the nav anchor elements on hover */
+nav a:hover {
+	background-color: #0059b3;
+}
+
+/* styles for the main element */
+main {
+	padding: 20px;
+	margin-top: 10px;
+}
+
+/* styles for the section element */
+section {
+	margin-bottom: 20px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 20px;
+}
+
+/* styles for the last section element */
+section:last-of-type {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+/* styles for the h2 element */
+h2 {
+	font-size: 24px;
+	margin-top: 0;
+}
+
+/* styles for the p element */
+p {
+	line-height: 1.5;
+}
+
+
+  

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TrackIt!</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+	<header>
+		<h1><center>TrackIt!</center></h1>
+	</header>
+	<nav>
+		<ul>
+	<li><a href="index.html">Home</a></li>
+    <li><a href="About.html">About</a></li>
+	<li><a href="UserGuide.html">User Guide</a></li>
+	<li><a href="LeagueOfLegends.html">League of Legends</a></li>
+    <li><a href="Apex.html">Apex Legends</a></li>
+    <li><a href="Steam.html">Steam</a></li>
+    <li><a href="Mojang.html">Mojang</a></li>
+    <li><a href="Roblox.html">ROBLOX</a></li>
+	<li><a href="Valorant.html">Valorant</a></li>
+	<li><a href="Blizzard.html">Blizzard</a></li>
+	</ul>
+</nav>
+<main>
+	<section>
+		<h2><center>Welcome to the Blizzard Tracker!</center></h2>
+		<p><center><label for="user-input">Enter your Username:</label>		
+			<input type="text" id="user-id" name="user-id"></center></p>	
+			<p><center><label for="user-input">Enter your Tag:</label>
+			<input type="text" id="tag" name="tag"></center></p>	
+			<p><center><label for="user-input">Enter your Platform:</label>
+			<input type="text" id="platform" name="platform"></center></p>
+			<p><center><label for="user-input">Enter your Region:</label>
+				<input type="text" id="region" name="region"></center></p>		
+			<div style="text-align:center;">
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</div>
+		</form>
+	</section>
+</main>
+</body>
+</html>
