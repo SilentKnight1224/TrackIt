@@ -2,7 +2,7 @@ from flask import ( Blueprint, flash, g, redirect, render_template, request, ses
 import requests
 from db import get_db
 
-Steam = Blueprint(__name__, "Steam")
+Steam = Blueprint( "Steam", __name__ )
 
 @Steam.route("Steam.html")
 def goToSteam():

@@ -3,7 +3,7 @@ import requests
 from jinja2 import Template
 import json
 
-Overwatch = Blueprint(__name__, 'Overwatch')
+Overwatch = Blueprint('Overwatch', __name__)
 
 @Overwatch.route("Overwatch.html")
 def goToOverwatch():

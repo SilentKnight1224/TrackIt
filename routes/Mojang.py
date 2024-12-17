@@ -5,7 +5,7 @@ import requests
 from datetime import datetime
 from mojang import Client
 
-Mojang = Blueprint(__name__, "Mojang")
+Mojang = Blueprint( "Mojang", __name__ ) 
 
 @Mojang.route("Mojang.html")
 def goToMojang():

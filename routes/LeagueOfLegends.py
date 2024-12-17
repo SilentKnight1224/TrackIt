@@ -4,7 +4,7 @@ import requests
 from jinja2 import Template
 import json
 
-LeagueOfLegends = Blueprint(__name__, "LeagueOfLegends")
+LeagueOfLegends = Blueprint( "LeagueOfLegends", __name__,)
 
 @LeagueOfLegends.route("LeagueOfLegends.html")
 def goToLeagueOfLegends():
