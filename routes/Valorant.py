@@ -1,8 +1,5 @@
-from flask import ( Blueprint, flash, g, redirect, render_template, render_template_string, request, session, url_for, current_app)
+from flask import ( Blueprint, redirect, render_template, render_template_string, request, url_for)
 import requests
-from jinja2 import Template
-import json
-from db import get_db
 from dotenv import load_dotenv
 import os
 
@@ -17,10 +14,23 @@ class Valorant_API:
         self.region = None
         self.puuid = None 
 
-    # Use this firtst method to set parameters for all other API calls
+    def errorHandler(self, data):
+        if 'status' in data.keys():
+            if data['status'] != 200:
+                return False
+        else:
+            return False
+        return True
+
+    # Use this method to set parameters for all other API calls
     def getAccountDetails(self, name, tag):
         response = requests.get(f'https://api.henrikdev.xyz/valorant/v1/account/{name}/{tag}?api_key={self.key}')
         data = response.json() 
+
+        status = self.errorHandler(data)
+        if not status:
+            return status
+
         self.name = name
         self.tag = tag
         self.region = data['data']['region']
@@ -55,49 +65,49 @@ def getValorantStats():
     name = request.args.get('user_id')
     tag = request.args.get('tag')
 
-    if (name and tag) == False:
+    if name == "" or tag == "":
         return "Bad request", 400
 
     api_caller = Valorant_API()  
     accountData = api_caller.getAccountDetails(name, tag)
-
-    if accountData['status']:
-        if accountData['status'] != 200:
-            return accountData, 404
+    if not accountData:
+        return f'User not found' 
 
     accountLevel = (accountData['data']['account_level'])
     banner = accountData['data']['card']['wide']
     pfp = accountData['data']['card']['small']
     card = accountData['data']['card']['large']
 
-    matchData = api_caller.getMatchHistory() 
-    if matchData['status']:
-        if matchData['status'] !=200:
-            return matchData, 404
+    matchData = api_caller.getMatchHistory()
+    kd = []
+    if not api_caller.errorHandler(matchData):
+        kd = [matchData['errors'][0]['message']]
+    else:
+        stats = {}
+        for match in matchData['data']:
+            mode = match['meta']['mode'] 
+            sumKills = match['stats']['kills'] 
+            sumDeaths = match['stats']['deaths']
+            sumAssists = match['stats']['assists'] 
+            if mode in stats: 
+                sumKills += stats[mode]['kills'] 
+                sumDeaths += stats[mode]['deaths']
+                sumDeaths += stats[mode]['assists'] 
+                stats[mode]['kills'] = sumKills
+                stats[mode]['deaths'] = sumDeaths
+                stats[mode]['assists'] = sumAssists
+                stats[mode]['count'] += 1
+            else:
+                stats[mode] = { 'kills': sumKills, 'deaths': sumDeaths, 'assists': sumAssists, 'count': 1}
+        for i in stats.keys():
+            kd.append( f'{i}:\t {stats[i]['kills']}/{stats[i]['deaths']}/{stats[i]['assists']} over {stats[i]['count']} game(s) played ')
 
-    stats = {}
-    for match in matchData['data']:
-        mode = match['meta']['mode'] 
-        sumKills = match['stats']['kills'] 
-        sumDeaths = match['stats']['deaths']
-        sumAssists = match['stats']['assists'] 
-        if mode in stats: 
-            sumKills += stats[mode]['kills'] 
-            sumDeaths += stats[mode]['deaths']
-            sumDeaths += stats[mode]['assists'] 
-            stats[mode]['kills'] = sumKills
-            stats[mode]['deaths'] = sumDeaths
-            stats[mode]['assists'] = sumAssists
-            stats[mode]['count'] += 1
-        else:
-            stats[mode] = { 'kills': sumKills, 'deaths': sumDeaths, 'assists': sumAssists, 'count': 1}
-
-    l = []
-    for i in stats.keys():
-        l.append( f'{i}:\t {stats[i]['kills']}/{stats[i]['deaths']}/{stats[i]['assists']} over {stats[i]['count']} game(s) played ')
-    
-    rankData = [api_caller.getRankData()['data']['current_data']['images']['small'], api_caller.getRankData()['data']['current_data']['currenttierpatched'], 
-                api_caller.getRankData()['data']['highest_rank']['patched_tier']] 
+    rankData = api_caller.getRankData() 
+    if not api_caller.errorHandler(rankData):
+        ranks = [rankData['errors'][0]['message']]
+    else:
+        ranks = [rankData['data']['current_data']['images']['small'], rankData['data']['current_data']['currenttierpatched'], 
+                rankData['data']['highest_rank']['patched_tier']] 
 
     return render_template_string('''
         {% extends "layout.html" %} 
@@ -198,4 +208,4 @@ def getValorantStats():
                 </div>
             </center>
         {% endblock %}
-        ''', accountLevel = accountLevel, estimate = l, name = name, banner = banner, pfp = pfp, card=card, rankData=rankData)
+        ''', accountLevel = accountLevel, estimate = kd, name = name, banner = banner, pfp = pfp, card=card, rankData=ranks)

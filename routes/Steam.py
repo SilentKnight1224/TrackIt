@@ -1,26 +1,27 @@
-from flask import ( Blueprint, flash, g, redirect, render_template, request, session, url_for)
+from flask import ( Blueprint, flash, g, redirect, render_template, request, session, url_for, render_template_string)
 import requests
-from db import get_db
-
+from dotenv import load_dotenv
+import os 
 Steam = Blueprint( "Steam", __name__ )
+
+class Steam_API:
+    def __init__(self):
+        load_dotenv()
+        self.key = os.getenv('STEAM_API_KEY')
+
+    def getGames(self, steamId):
+        response = requests.get(f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.key}&steamid={steamId}&format=json&include_appinfo=true")
+        data = response.json()
+        return data
+    
+    def getAchievements(self, steamId, appId):
+        response = requests.get(f'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid={appId}&key={self.key}&steamid={steamId}')
+        data = response.json()
+        return data
 
 @Steam.route("Steam.html")
 def goToSteam():
-    try:
-        if g.user:
-            db = get_db()
-            row = db.execute(
-            'SELECT * FROM user WHERE id = ?', (session.get('user_id'),)
-            ).fetchone()
-            steam_id = row[6]
-            if steam_id == None:
-                return render_template("Steam.html")
-            else:
-                return redirect(url_for('Steam.getSteamStats', user_id=steam_id))
-        else:
-            return render_template("Steam.html")
-    except:
-        return render_template("Steam.html")
+    return render_template("Steam.html")
 
 @Steam.route('SteamID', methods=['POST'])
 def getSteamID():
@@ -30,38 +31,51 @@ def getSteamID():
 @Steam.route('SteamStats', methods=['GET', 'POST'])
 def getSteamStats():
     if request.method == 'POST':
-            return redirect(url_for('Steam.getSteamID'))
+        return redirect(url_for('Steam.getSteamID'))
+    
+    steamId = request.args.get('user_id')
+
+    api_caller = Steam_API()
     try:
-        game_playtime = {}
-        user_id = request.args.get('user_id', '76561197960434622')
-        steam_id = int(user_id)
-        api_key = '5D5EC3147B58B6B3BBB3F23BC5A64E6F'
-        url1 = f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={api_key}&steamid={steam_id}&format=json'
-        url2 = f'https://api.steampowered.com/ISteamApps/GetAppList/v2/'
-        response1 = requests.get(url1)
-        response2 = requests.get(url2)
-        data1 = response1.json()
-        games1 = data1['response']['games']
-        data2 = response2.json()['applist']['apps']
-        numberOfGames = (f'Number of games: {len(games1)}')
-        for game1 in games1:
-            for app2 in data2:
-                if game1["appid"] == app2['appid']:
-                    game_name = app2['name']
-                    playtime = game1['playtime_forever']
-                    game_playtime[game_name] = playtime
-                    break
-        try:
-            if g.user != None:
-                db = get_db()
-                db.execute(
-                    "UPDATE user SET steamid = ? WHERE id = ?",
-                    (user_id, session.get('user_id')) 
-                )
-                db.commit()
-        except:
-            return render_template("index.html")
-        return render_template("mySteamPage.html", title="My Steam Page", heading="My Game List", game_playtime=game_playtime)
+        gamesData = api_caller.getGames(steamId)
     except:
-        return render_template("Steam.html")
+        return 'User not found' 
+    
+    games = {}
+    for game in gamesData['response']['games']:
+        appId = game['appid'] 
+        achievementsData = api_caller.getAchievements(steamId, appId) 
+        #print(achievementsData)
+        count = [0,0]
+        if 'error' not in achievementsData['playerstats']:
+            for achievement in achievementsData['playerstats']['achievements']:
+                if achievement['achieved'] == 1:
+                    count[0] += 1
+                count[1] += 1 
+        img = f' http://media.steampowered.com/steamcommunity/public/images/apps/{appId}/{game['img_icon_url']}.jpg'
+        percentage = f'{count[0]}/{count[1]} achievements'
+        playtime = f'{game['playtime_forever']} minutes'
+        games[appId] = [ img, game['name'], playtime, percentage]
+    
+    return render_template_string('''
+                                    {% extends "layout.html" %}
+                                        {% block body%}
+                                        <center>
+                                            <h1>{{ heading }}</h1>
+                                                <table>
+                                                    {% for key, value in games.items() %}
+                                                        <tr>
+                                                        {% for i in value %}
+                                                            {% if i is string and i.endswith("jpg") %}
+                                                                <td> <img src="{{ i }}"/> </td>
+                                                            {% else %}
+                                                                <td>{{ i }}</td>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        </tr>
+                                                    {% endfor %}
+                                                </table>
+                                        </center>
+                                    {% endblock %}
+                                  ''', heading = "Games", games = games)
 
