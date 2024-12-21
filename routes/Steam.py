@@ -54,7 +54,7 @@ def getSteamStats():
                 count[1] += 1 
         img = f' http://media.steampowered.com/steamcommunity/public/images/apps/{appId}/{game["img_icon_url"]}.jpg'
         percentage = f'{count[0]}/{count[1]} achievements'
-        playtime = f'{game['playtime_forever']} minutes'
+        playtime = f"{game['playtime_forever']} minutes"
         games[appId] = [ img, game['name'], playtime, percentage]
     
     return render_template_string('''
