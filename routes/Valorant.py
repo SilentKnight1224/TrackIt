@@ -100,7 +100,7 @@ def getValorantStats():
             else:
                 stats[mode] = { 'kills': sumKills, 'deaths': sumDeaths, 'assists': sumAssists, 'count': 1}
         for i in stats.keys():
-            kd.append( f'{i}:\t {stats[i]['kills']}/{stats[i]['deaths']}/{stats[i]['assists']} over {stats[i]['count']} game(s) played ')
+            kd.append( f"{i}:\t {stats[i]['kills']}/{stats[i]['deaths']}/{stats[i]['assists']} over {stats[i]['count']} game(s) played ")
 
     rankData = api_caller.getRankData() 
     if not api_caller.errorHandler(rankData):
