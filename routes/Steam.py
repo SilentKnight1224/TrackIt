@@ -60,22 +60,38 @@ def getSteamStats():
     return render_template_string('''
                                     {% extends "layout.html" %}
                                         {% block body%}
-                                        <center>
-                                            <h1>{{ heading }}</h1>
-                                                <table>
-                                                    {% for key, value in games.items() %}
-                                                        <tr>
-                                                        {% for i in value %}
-                                                            {% if i is string and i.endswith("jpg") %}
-                                                                <td> <img src="{{ i }}"/> </td>
-                                                            {% else %}
-                                                                <td>{{ i }}</td>
-                                                            {% endif %}
+                                            <style>
+                                                table {
+                                                    width: 50%;
+                                                    tr:nth-of-type(odd) {
+                                                        background-color:#ccc;
+                                                    }
+                                                    table tr:nth-child(even) td{
+                                                        background:#fff;
+                                                    }
+                                                } 
+                                                td {
+                                                    padding: 10px;     
+                                                    justify-content: center; 
+                                                    text-align: center;
+                                                }
+                                            </style>
+                                            <center>
+                                                <h1>{{ heading }}</h1>
+                                                    <table>
+                                                        {% for key, value in games.items() %}
+                                                            <tr>
+                                                            {% for i in value %}
+                                                                {% if i is string and i.endswith("jpg") %}
+                                                                    <td> <img src="{{ i }}"/> </td>
+                                                                {% else %}
+                                                                    <td>{{ i }}</td>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            </tr>
                                                         {% endfor %}
-                                                        </tr>
-                                                    {% endfor %}
-                                                </table>
-                                        </center>
-                                    {% endblock %}
+                                                    </table>
+                                            </center>
+                                        {% endblock %}
                                   ''', heading = "Games", games = games)
 

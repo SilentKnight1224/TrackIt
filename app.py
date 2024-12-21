@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template
 from views import views
 from routes.roblox import roblox
-from routes.Mojang import Mojang
+#from routes.Mojang import Mojang
 from routes.Steam import Steam
 from routes.LeagueOfLegends import LeagueOfLegends
 from routes.Valorant import Valorant
@@ -22,11 +22,11 @@ app.config.from_mapping(
     )
 app.config['VALORANT_API_KEY'] = os.getenv('VALORANT_API_KEY')
 
-db.init_app(app)
+#db.init_app(app)
 app.register_blueprint(account, url_prefix='/Account')
 app.register_blueprint(views, url_prefix="/")
 app.register_blueprint(roblox, url_prefix="/")
-app.register_blueprint(Mojang, url_prefix="/")
+#app.register_blueprint(Mojang, url_prefix="/")
 app.register_blueprint(Steam, url_prefix="/")
 app.register_blueprint(LeagueOfLegends, url_prefix="/")
 app.register_blueprint(Valorant, url_prefix="/")
