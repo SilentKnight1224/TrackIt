@@ -52,7 +52,7 @@ def getSteamStats():
                 if achievement['achieved'] == 1:
                     count[0] += 1
                 count[1] += 1 
-        img = f' http://media.steampowered.com/steamcommunity/public/images/apps/{appId}/{game['img_icon_url']}.jpg'
+        img = f' http://media.steampowered.com/steamcommunity/public/images/apps/{appId}/{game["img_icon_url"]}.jpg'
         percentage = f'{count[0]}/{count[1]} achievements'
         playtime = f'{game['playtime_forever']} minutes'
         games[appId] = [ img, game['name'], playtime, percentage]
