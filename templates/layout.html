@@ -1,29 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>TrackIt!</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    </head>
-    <body>
-        <header>
-            <h1><center>TrackIt!</center></h1>
-        </header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="About.html">About</a></li>
-                <li><a href="UserGuide.html">User Guide</a></li>
-                <li><a href="LeagueOfLegends.html">League of Legends</a></li>
-                <li><a href="Apex.html">Apex Legends</a></li>
-                <li><a href="Steam.html">Steam</a></li>
-                <li><a href="Mojang.html">Mojang</a></li>
-                <li><a href="Roblox.html">ROBLOX</a></li>
-                <li><a href="Valorant.html">Valorant</a></li>
-                <li><a href="Overwatch.html">Overwatch</a></li>
-                <li><a href="{{ url_for('account.register') }}">Register</a></li>
-            </ul>
-        </nav>
-        {% block body%}
-        {% endblock %}
-    </body>
+  <head>
+    <title>TrackIt!</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://s.clipartkey.com/mpngs/s/202-2020937_why-every-ecommerce-store-tracking-icon-png.png"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>
+        <center>TrackIt!</center>
+      </h1>
+    </header>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index')}}">Home</a></li>
+        <!--<li><a href="About.html">About</a></li>-->
+        <li><a href="{{ url_for('goToUserGuide')}}">User Guide</a></li>
+        <li>
+          <a href="{{ url_for('LeagueOfLegends.goToLeagueOfLegends')}}"
+            >League of Legends</a
+          >
+        </li>
+        <!--<li><a href="Apex.html">Apex Legends</a></li>-->
+        <li><a href="{{ url_for('Steam.goToSteam')}}">Steam</a></li>
+        <!--<li><a href="Mojang.html">Mojang</a></li>-->
+        <!--<li><a href="Roblox.html">ROBLOX</a></li>-->
+        <li><a href="{{ url_for('Valorant.goToValorant')}}">Valorant</a></li>
+        <!--<li><a href="Overwatch.html">Overwatch</a></li>-->
+        <!--<li><a href="{{ url_for('account.register') }}">Register</a></li>-->
+      </ul>
+    </nav>
+    <center>{% block body%} {% endblock %}</center>
+  </body>
 </html>

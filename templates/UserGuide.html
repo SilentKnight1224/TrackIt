@@ -1,27 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>TrackIt!</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-	<header>
-		<h1><center>TrackIt!</center></h1>
-	</header>
-	<nav>
-		<ul>
-			<li><a href="index.html">Home</a></li>
-			<li><a href="About.html">About</a></li>
-			<li><a href="UserGuide.html">User Guide</a></li>
-			<li><a href="LeagueOfLegends.html">League of Legends</a></li>
-			<li><a href="Apex.html">Apex Legends</a></li>
-			<li><a href="Steam.html">Steam</a></li>
-			<li><a href="Mojang.html">Mojang</a></li>
-			<li><a href="Roblox.html">ROBLOX</a></li>
-			<li><a href="Valorant.html">Valorant</a></li>
-			<li><a href="Overwatch.html">Overwatch</a></li>
-		</ul>
-	  </nav>
+{% extends 'layout.html'%}
+{% block body %}
 	<main>
 		<section>
 			<h1><center>User Guide</center></h1>
@@ -84,5 +62,5 @@
 			<p>25447559</p>
 		</section>
 	</main>
-</body>
+{% endblock %}
 </html>

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, render_template_string
 import os
 import requests
 from jinja2 import Template
@@ -6,76 +6,135 @@ import json
 
 LeagueOfLegends = Blueprint( "LeagueOfLegends", __name__,)
 
-@LeagueOfLegends.route("LeagueOfLegends.html")
+class LoL_API():
+    def __init__(self):
+        self.key = os.getenv("RIOT_API_KEY")
+        self.puuid = None
+    
+    def setPuuid(self, userId, tag): 
+        response = requests.get(f"https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{userId}/{tag}?api_key={self.key}")
+        if response.status_code != 200:
+            return response.status_code 
+
+        data = response.json()
+        self.puuid = data["puuid"]
+        return 200 
+
+    def getChampionMastery(self):
+        response = requests.get(f"https://na1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{self.puuid}?api_key={self.key}")
+        data = response.json()
+        return data
+
+    def getAccountDetails(self):
+        url = f"https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/{self.puuid}?api_key={self.key}" 
+        response = requests.get(url)
+        data = response.json()
+        level = data['summonerLevel']
+        imageId = data['profileIconId']
+        image = f"https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/{imageId}.png"
+        return (level, image)
+
+@LeagueOfLegends.route("home")
 def goToLeagueOfLegends():
     return render_template("LeagueOfLegends.html")
 
 @LeagueOfLegends.route('LeagueOfLegendsID', methods=['POST'])
 def getLeagueOfLegendsID():
     user_id = request.form.get('user-id')
-    region = request.form.get('region')
-    return redirect(url_for('LeagueOfLegends.getLeagueOfLegendsStats', user_id=user_id, region=region))
+    tag = request.form.get('tag')
+    return redirect(url_for('LeagueOfLegends.getStats', user_id=user_id, tag=tag))
 
-@LeagueOfLegends.route('LeagueOfLegendsStats', methods=['GET', 'POST'])
-def getLeagueOfLegendsStats():
-    if request.method == 'POST':
-            return redirect(url_for('LeagueOfLegends.getLeagueOfLegendsID'))
-    try:
-        summoner_name = request.args.get('user_id')
-        api_key = "RGAPI-c693b3ed-8b35-4418-92ad-6fa9189a650e"
-        region = request.args.get('region')
-        url = "https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summoner_name + "?api_key=" + api_key
-        response = requests.get(url)
-        summoner_info = json.loads(response.content)
-        summoner_id = summoner_info["id"]
-        player_level = summoner_info["summonerLevel"]
-        icon_id = summoner_info["profileIconId"]
-        url = "https://" + region + ".api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/" + summoner_id + "?api_key=" + api_key
-        response = requests.get(url)
-        champ_mastery_list = json.loads(response.content)
-        url = "https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + summoner_id + "?api_key=" + api_key
-        response = requests.get(url)
-        rank_info = json.loads(response.content)
-        statDict = {}
-        if rank_info:
-            statDict["Playtime (Minutes)"] = round(sum([int(champ_mastery['championPoints']) for champ_mastery in champ_mastery_list])/60, 2)
-            statDict["Rank"] = []
-            for rank in rank_info:
-                queue_type = rank["queueType"]
-                tier = rank["tier"]
-                rank = rank["rank"]
-                lp = str(rank_info[0]["leaguePoints"]) + " LP"
-                rank_info_str = queue_type + " - " + tier + " " + rank + " (" + lp + ")"
-                statDict["Rank"].append(rank_info_str)
-        if player_level:
-            statDict["Player Level"] = player_level
-        if icon_id:
-            icon_url = f"https://cdn.communitydragon.org/latest/profile-icon/{icon_id}"
-        else:
-            icon_url = None
-        
-# Get champion mastery data
-        def get_champion_name(champ_id):
-            with open('champion_names.txt') as f:
-                for line in f:
-                    data = line.strip().split()
-                    if int(data[1]) == champ_id:
-                        return data[0]
-            return "Champion not found"
-        url = f"https://{region}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/{summoner_id}?api_key={api_key}"
-        response = requests.get(url)
-        
-        try:
-            champ_mastery_list = json.loads(response.content)
-            top_5_champs = sorted(champ_mastery_list, key=lambda x: x["championPoints"], reverse=True)[:5]
-            if top_5_champs:
-                top5List = []
-                for i, champ in enumerate(top_5_champs):
-                    champion_name = get_champion_name(champ['championId'])
-                    top5List.append(f"{i+1}. {champion_name} - Level {champ['championLevel']} - {champ['championPoints']} points \n")
-        except:
-            top5List = ['Not enough data']
+@LeagueOfLegends.route('getLoLStats', methods=['GET', 'POST'])
+def getStats():
+    user_id = request.args.get("user_id")    
+    tag = request.args.get("tag")
 
-        return render_template("myLeagueOfLegendsPage.html", title="My League of Lengends Stats", heading=f"{summoner_name}'s Game Stats", statDict=statDict, image = icon_url,top5List = top5List)
-    except:
-        return render_template("LeagueOfLegends.html")
+    api_caller = LoL_API()
+
+    response = api_caller.setPuuid(user_id, tag)  
+    if response != 200:
+        if response == 403:
+           return render_template("error.html", errorMessage = f"Error: {response}, API key expired")  
+        return render_template("error.html", errorMessage = f"Error: {response}, User not found") 
+    
+    profile = api_caller.getAccountDetails()
+    print(profile)
+    summonerLevel = profile[0]
+    pfp = profile[1]
+
+    champions = {}
+    listOfChampionsData = requests.get(f"https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json")
+    listOfChampions = listOfChampionsData.json() 
+
+    for champion_data, champion in listOfChampions['data'].items():
+        key = int(champion['key'])
+        name = champion['name']
+        image = f"https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/{champion['image']['full']}"
+        champions[key] = {'name': name, 'image': image}
+
+    championsData = api_caller.getChampionMastery()
+    for champion in championsData:
+        id = int(champion['championId'])
+        level = champion['championLevel']
+        points = champion['championPoints']
+        levelUp = champion['championPointsUntilNextLevel']
+        stats = [id, level, points, levelUp]
+        for stat in stats:
+            champions[id][str(stat)] = stat
+
+    return render_template_string('''
+                        {% extends "layout.html" %}
+                            {% block body%}
+                                <style>
+                                    table {
+                                        width: 50%;
+                                        tr:nth-of-type(odd) {
+                                            background-color:#ccc;
+                                        }
+                                        table tr:nth-child(even) td{
+                                            background:#fff;
+                                        }
+                                    } 
+                                    td {
+                                        padding: 10px;     
+                                        justify-content: center; 
+                                        text-align: center;
+                                    }
+                                    div{
+                                    margin: 10px; 
+                                    }
+                                    #container {
+                                    display: flex;
+                                    border-width: 10px;
+                                    justify-content: center;
+                                    flex-direction: row;
+                                  align-content: center;
+                                    }
+                                </style>
+                                <center>
+                                    <h1>{{ heading }}</h1>
+                                    <div id="container">
+                                        <div>
+                                            <img src="{{ pfp }}">
+                                        </div>
+                                        <div style="align-self: center" >
+                                            <p>{{ name }}</p>
+                                            <p>{{ level }}</p>
+                                        </div>
+                                    </div>
+                                        <table>
+                                            {% for key, value in games.items() %}
+                                                <tr>
+                                                    {% for key, value in value.items() %}
+                                                        {% if value is string and value.endswith("png") %}
+                                                            <td> <img src="{{ value }}"/> </td>
+                                                        {% else %}
+                                                            <td>{{ value }}</td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                </center>
+                            {% endblock %}
+                    ''', heading = "Games", games = champions,  name = user_id , level = summonerLevel, pfp = pfp)

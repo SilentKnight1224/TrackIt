@@ -7,8 +7,13 @@ Valorant = Blueprint( "Valorant", __name__,)
 
 class Valorant_API:
     def __init__(self):
-        load_dotenv()
         self.key = os.getenv("VALORANT_API_KEY")
+
+        if not self.key:
+            print("Error: API key not found!")
+        else:
+            print(f"API Key loaded: ${self.key}")
+
         self.name = None
         self.tag = None
         self.region = None
@@ -16,11 +21,13 @@ class Valorant_API:
 
     def errorHandler(self, data):
         if 'status' in data.keys():
-            if data['status'] != 200:
-                return False
+            if data['status'] == 200:
+                return True
+            else:
+                return False 
         else:
+            print(data)
             return False
-        return True
 
     # Use this method to set parameters for all other API calls
     def getAccountDetails(self, name, tag):
@@ -47,7 +54,7 @@ class Valorant_API:
         data = response.json()
         return data
 
-@Valorant.route("Valorant.html")
+@Valorant.route("home")
 def goToValorant():
     return render_template("Valorant.html")
 
@@ -107,14 +114,14 @@ def getValorantStats():
         ranks = [rankData['errors'][0]['message']]
     else:
         ranks = [rankData['data']['current_data']['images']['small'], rankData['data']['current_data']['currenttierpatched'], 
-                rankData['data']['highest_rank']['patched_tier']] 
+                f"Elo: {rankData['data']['current_data']['elo']}", rankData['data']['highest_rank']['patched_tier']] 
 
     return render_template_string('''
         {% extends "layout.html" %} 
         {% block body%}
             <style>
-
                 .container {
+                    background-color: #0059b3;
                     width: 400px;
                     height: 350px;
                     margin: 20px;
@@ -124,6 +131,7 @@ def getValorantStats():
                     align-items: center;
                 }
                 .container div {
+                    background-color: lightblue;
                     width: 150px;
                     height: 260px;
                     border: 2px solid black;
@@ -147,6 +155,7 @@ def getValorantStats():
                 } 
 
                 .container2 {
+                    background-color: #0059b3;
                     width: 800px;
                     height: 700px;
                     margin: 20px;
@@ -157,6 +166,7 @@ def getValorantStats():
                 }
                 
                 .container2 div {
+                    background-color: lightblue;
                     float: left;
                     width: 300px;
                     height: 400px;
@@ -175,7 +185,7 @@ def getValorantStats():
                     width: 400px;
                     display: flex;
                     justify-content: center;
-                    align-items: center;
+                    align-items: left;
                     flex-direction: column;
                 }
             </style>

@@ -19,7 +19,7 @@ class Steam_API:
         data = response.json()
         return data
 
-@Steam.route("Steam.html")
+@Steam.route("home")
 def goToSteam():
     return render_template("Steam.html")
 
@@ -64,10 +64,10 @@ def getSteamStats():
                                                 table {
                                                     width: 50%;
                                                     tr:nth-of-type(odd) {
-                                                        background-color:#ccc;
+                                                        background-color:lightblue;
                                                     }
                                                     table tr:nth-child(even) td{
-                                                        background:#fff;
+                                                        background-color: #0059b3;
                                                     }
                                                 } 
                                                 td {
