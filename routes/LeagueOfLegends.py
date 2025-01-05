@@ -38,6 +38,10 @@ class LoL_API():
 def goToLeagueOfLegends():
     return render_template("LeagueOfLegends.html")
 
+@LeagueOfLegends.route("example")
+def getExample():
+    return redirect(url_for('LeagueOfLegends.getStats', user_id='lixtah', tag='4444'))
+
 @LeagueOfLegends.route('LeagueOfLegendsID', methods=['POST'])
 def getLeagueOfLegendsID():
     user_id = request.form.get('user-id')
@@ -78,7 +82,7 @@ def getStats():
         level = champion['championLevel']
         points = champion['championPoints']
         levelUp = champion['championPointsUntilNextLevel']
-        stats = [id, level, points, levelUp]
+        stats = [ level, points, levelUp]
         for stat in stats:
             champions[id][str(stat)] = stat
 
@@ -89,7 +93,10 @@ def getStats():
                                     table {
                                         width: 50%;
                                         tr:nth-of-type(odd) {
-                                            background-color:#ccc;
+                                            background-color: goldenrod
+                                        }
+                                        tr:nth-of-type(even) {
+                                            background-color: burlywood;
                                         }
                                         table tr:nth-child(even) td{
                                             background:#fff;
@@ -108,21 +115,31 @@ def getStats():
                                     border-width: 10px;
                                     justify-content: center;
                                     flex-direction: row;
-                                  align-content: center;
+                                    align-content: center;
+                                    background-color: chocolate;
+                                    width: 400px;
+                                    border: solid goldenrod;
                                     }
                                 </style>
                                 <center>
-                                    <h1>{{ heading }}</h1>
+                                    <h2>{{ heading }}</h2>
                                     <div id="container">
-                                        <div>
-                                            <img src="{{ pfp }}">
+                                        <div style="align-self: center; margin-right: 20px; border: solid goldenrod 5px; padding: 5px; background-color: burlywood;" >
+                                            <p>Summoner: {{ name }}</p>
+                                            <p>Lv: {{ level }}</p>
                                         </div>
-                                        <div style="align-self: center" >
-                                            <p>{{ name }}</p>
-                                            <p>{{ level }}</p>
+                                        <div>
+                                            <img src="{{ pfp }}" style="width: 100px; height: 100px; object-fit: cover; border: 5px solid goldenrod; ">
                                         </div>
                                     </div>
                                         <table>
+                                  <tr style="background-color: burlywood;">
+                                    <td> Champion </td>
+                                    <td> Icon </td>
+                                    <td> Level </td>
+                                    <td> Points </td>
+                                    <td> Points for Level Up </td>
+                                  </tr>
                                             {% for key, value in games.items() %}
                                                 <tr>
                                                     {% for key, value in value.items() %}
@@ -137,4 +154,4 @@ def getStats():
                                         </table>
                                 </center>
                             {% endblock %}
-                    ''', heading = "Games", games = champions,  name = user_id , level = summonerLevel, pfp = pfp)
+                    ''', heading = "Your Stats", games = champions,  name = user_id , level = summonerLevel, pfp = pfp)

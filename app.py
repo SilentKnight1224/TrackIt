@@ -18,7 +18,6 @@ app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'TrackIt.sqlite'),
     )
-app.config['VALORANT_API_KEY'] = os.getenv('VALORANT_API_KEY')
 
 #db.init_app(app)
 app.register_blueprint(account, url_prefix='/Account')

@@ -58,6 +58,10 @@ class Valorant_API:
 def goToValorant():
     return render_template("Valorant.html")
 
+@Valorant.route("example")
+def getExample():
+    return redirect(url_for('Valorant.getValorantStats', user_id='SilentKnight', tag ='1224'))
+
 @Valorant.route("ValorantID", methods= ['POST'])
 def getValorantID():
     user_id = request.form.get('user-id')
@@ -73,12 +77,12 @@ def getValorantStats():
     tag = request.args.get('tag')
 
     if name == "" or tag == "":
-        return "Bad request", 400
+        return render_template("error.html", errorMessage='Bad Request') 
 
     api_caller = Valorant_API()  
     accountData = api_caller.getAccountDetails(name, tag)
     if not accountData:
-        return f'User not found' 
+        return render_template("error.html", errorMessage='User not found') 
 
     accountLevel = (accountData['data']['account_level'])
     banner = accountData['data']['card']['wide']
@@ -113,8 +117,13 @@ def getValorantStats():
     if not api_caller.errorHandler(rankData):
         ranks = [rankData['errors'][0]['message']]
     else:
-        ranks = [rankData['data']['current_data']['images']['small'], rankData['data']['current_data']['currenttierpatched'], 
-                f"Elo: {rankData['data']['current_data']['elo']}", rankData['data']['highest_rank']['patched_tier']] 
+        ranks = [
+            rankData['data']['current_data']['images']['small'], 
+            f"Current: {rankData['data']['current_data']['currenttierpatched']}", 
+            f"Elo: {rankData['data']['current_data']['elo']}", 
+            f"Peak: {rankData['data']['highest_rank']['patched_tier']}"
+        ]
+ 
 
     return render_template_string('''
         {% extends "layout.html" %} 
@@ -193,7 +202,8 @@ def getValorantStats():
                 <h2> <img src="{{ banner }}"> </h2> 
                 <div class='container'>
                     <div id='box1'>
-                    <img src="{{ pfp }}">  
+                    <img src="{{ pfp }}">
+                    <p> {{ name }} </p> 
                     <p> Lv. {{accountLevel}}</p>
                     </div>
                     <div id='box2'>

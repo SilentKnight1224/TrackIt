@@ -28,11 +28,11 @@
       action="{{ url_for('LeagueOfLegends.getLeagueOfLegendsID') }}"
     >
       <p>
-        <label for="user-input">Enter your Riot ID</label>
+        <label for="user-input">Enter your Riot ID: </label>
         <input type="text" id="user-id" name="user-id" />
       </p>
       <p>
-        <label for="user-input">Enter your tag</label>
+        <label for="user-input">Enter your tag: </label>
         <input type="text" id="tag" name="tag" />
       </p>
       <div style="text-align: center">
@@ -46,13 +46,16 @@
         height="300"
       />
     </div>
-    <h2>Need Help?</h2>
-    <button
-      class="blue-button"
-      onclick="window.location.href='UserGuide.html#leagueUserGuide'"
-    >
-      Go to League User Guide
-    </button>
   </section>
+  <h2>Need Help?</h2>
+  <button
+    class="blue-button"
+    onclick="window.location.href='{{ url_for('goToUserGuide') }}#leagueUserGuide'"
+  >
+    Go to League User Guide
+  </button>
+  <a href="{{ url_for('LeagueOfLegends.getExample') }}">
+    <button class="blue-button">Example</button>
+  </a>
 </main>
 {% endblock %}

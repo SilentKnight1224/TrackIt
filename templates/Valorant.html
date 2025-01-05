@@ -1,46 +1,62 @@
-{% extends "layout.html" %}
-{% block body %}
+{% extends "layout.html" %} {% block body %}
 <main>
-	<style>
-		.blue-button {
-			background-color: #4c9ed9;
-			color: white;
-			padding: 10px 20px;
-			border: none;
-			border-radius: 5px;
-			font-size: 20px;
-			cursor: pointer;
-		}
+  <style>
+    .blue-button {
+      background-color: #4c9ed9;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 20px;
+      cursor: pointer;
+    }
 
-		.image-container {
-			margin-top: 20px;
-			text-align: center;
-		}
-	</style>
-	<section>
-		<h2>
-			<center>Welcome to the Valorant Tracker!</center>
-		</h2>
-		<form method="POST" action="{{ url_for('Valorant.getValorantStats') }}">
-			<p>
-				<center><label for="user-input">Enter your Riot Username:</label> <input type="text" id="user-id"
-						name="user-id"></center>
-			</p>
-			<p>
-				<center><label for="user-input">Enter your Riot Tag:</label><input type="text" id="tag" name="tag">
-				</center>
-			</p>
-			<div style="text-align:center;">
-				<button type="submit" class="blue-button">Submit</button>
-			</div>
-			<div class="image-container">
-				<center><img src="{{ url_for('static', filename='images/valorant.jpg') }}" width="500" height="300">
-				</center>
-			</div>
-		</form>
-	</section>
-	<h2>Need Help?</h2>
-	<center><button class="blue-button" onclick="window.location.href='UserGuide.html#valorantUserGuide'">Go to Valorant
-			User Guide</button></center>
+    .image-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+  <section>
+    <h2>
+      <center>Welcome to the Valorant Tracker!</center>
+    </h2>
+    <form method="POST" action="{{ url_for('Valorant.getValorantStats') }}">
+      <p>
+        <center>
+          <label for="user-input">Enter your Riot Username:</label>
+          <input type="text" id="user-id" name="user-id" />
+        </center>
+      </p>
+      <p>
+        <center>
+          <label for="user-input">Enter your Riot Tag:</label
+          ><input type="text" id="tag" name="tag" />
+        </center>
+      </p>
+      <div style="text-align: center">
+        <button type="submit" class="blue-button">Submit</button>
+      </div>
+      <div class="image-container">
+        <center>
+          <img
+            src="{{ url_for('static', filename='images/valorant.jpg') }}"
+            width="500"
+            height="300"
+          />
+        </center>
+      </div>
+    </form>
+  </section>
+  <h2>Need Help?</h2>
+    <button
+      class="blue-button"
+      onclick="window.location.href='{{ url_for('goToUserGuide') }}#valorantUserGuide'"
+      style="margin: 5px"
+    >
+      Go to Valorant User Guide
+    </button>
+  <a href="{{ url_for('Valorant.getExample') }}">
+    <button class="blue-button">Example</button>
+  </a>
 </main>
 {% endblock %}

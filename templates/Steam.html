@@ -1,39 +1,49 @@
 {% extends "layout.html" %} {% block body %}
 <main>
-	<style>
-		.blue-button {
-			background-color: #4c9ed9;
-			color: white;
-			padding: 10px 20px;
-			border: none;
-			border-radius: 5px;
-			font-size: 20px;
-			cursor: pointer;
-		}
+  <style>
+    .blue-button {
+      background-color: #4c9ed9;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 20px;
+      cursor: pointer;
+    }
 
-		.image-container {
-			margin-top: 20px;
-			text-align: center;
-		}
-	</style>
-	<section>
-		<h2>Welcome to the Steam Tracker!</h2>
-		<form method="POST" action="{{ url_for('Steam.getSteamID') }}">
-			<p>
-				<label for="user-input">Enter your Steam ID:</label>
-				<input type="text" id="user-id" name="user-id" />
-			</p>
-			<div style="text-align: center">
-				<button type="submit" class="blue-button">Submit</button>
-			</div>
-			<div class="image-container">
-				<img src="{{ url_for('static', filename='images/steam.jpg') }}" width="500" height="300" />
-			</div>
-		</form>
-		<h2>Need Help?</h2>
-		<button class="blue-button" onclick="window.location.href='UserGuide.html#steamUserGuide'">
-			Go to Steam User Guide
-		</button>
-	</section>
+    .image-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+  <section>
+    <h2>Welcome to the Steam Tracker!</h2>
+    <form method="POST" action="{{ url_for('Steam.getSteamID') }}">
+      <p>
+        <label for="user-input">Enter your Steam ID:</label>
+        <input type="text" id="user-id" name="user-id" />
+      </p>
+      <div style="text-align: center">
+        <button type="submit" class="blue-button">Submit</button>
+      </div>
+      <div class="image-container">
+        <img
+          src="{{ url_for('static', filename='images/steam.jpg') }}"
+          width="500"
+          height="300"
+        />
+      </div>
+    </form>
+  </section>
+  <h2>Need Help?</h2>
+  <button
+    class="blue-button"
+    onclick="window.location.href='{{ url_for('goToUserGuide')}}#steamUserGuide'"
+  >
+    Go to Steam User Guide
+  </button>
+  <a href="{{ url_for('Steam.getExample') }}">
+    <button class="blue-button">Example</button>
+  </a>
 </main>
 {% endblock %}

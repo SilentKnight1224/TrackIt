@@ -28,6 +28,10 @@ def getSteamID():
     user_id = request.form.get('user-id')
     return redirect(url_for('Steam.getSteamStats', user_id=user_id))
 
+@Steam.route("example")
+def getExample():
+    return redirect(url_for('Steam.getSteamStats', user_id="76561198282192165"))
+
 @Steam.route('SteamStats', methods=['GET', 'POST'])
 def getSteamStats():
     if request.method == 'POST':
@@ -39,24 +43,27 @@ def getSteamStats():
     try:
         gamesData = api_caller.getGames(steamId)
     except:
-        return 'User not found' 
+        return render_template("error.html", errorMessage='User not found')  
     
     games = {}
-    for game in gamesData['response']['games']:
-        appId = game['appid'] 
-        achievementsData = api_caller.getAchievements(steamId, appId) 
-        #print(achievementsData)
-        count = [0,0]
-        if 'error' not in achievementsData['playerstats']:
-            for achievement in achievementsData['playerstats']['achievements']:
-                if achievement['achieved'] == 1:
-                    count[0] += 1
-                count[1] += 1 
-        img = f' http://media.steampowered.com/steamcommunity/public/images/apps/{appId}/{game["img_icon_url"]}.jpg'
-        percentage = f'{count[0]}/{count[1]} achievements'
-        playtime = f"{game['playtime_forever']} minutes"
-        games[appId] = [ img, game['name'], playtime, percentage]
-    
+    try:
+        for game in gamesData['response']['games']:
+            appId = game['appid'] 
+            achievementsData = api_caller.getAchievements(steamId, appId) 
+            #print(achievementsData)
+            count = [0,0]
+            if 'error' not in achievementsData['playerstats']:
+                for achievement in achievementsData['playerstats']['achievements']:
+                    if achievement['achieved'] == 1:
+                        count[0] += 1
+                    count[1] += 1 
+            img = f' http://media.steampowered.com/steamcommunity/public/images/apps/{appId}/{game["img_icon_url"]}.jpg'
+            percentage = f'{count[0]}/{count[1]} achievements'
+            playtime = f"{game['playtime_forever']} minutes"
+            games[appId] = [ img, game['name'], playtime, percentage]
+    except:
+        return render_template("error.html", errorMessage="Private profile") 
+
     return render_template_string('''
                                     {% extends "layout.html" %}
                                         {% block body%}
@@ -64,10 +71,15 @@ def getSteamStats():
                                                 table {
                                                     width: 50%;
                                                     tr:nth-of-type(odd) {
-                                                        background-color:lightblue;
+                                                        background-color: #21052C;
+                                                        color: white;
+                                                    }
+                                                    tr:nth-of-type(even) {
+                                                        background-color: #21052C;
+                                                        color: white;
                                                     }
                                                     table tr:nth-child(even) td{
-                                                        background-color: #0059b3;
+                                                        background-color: lightblue;
                                                     }
                                                 } 
                                                 td {
@@ -77,8 +89,15 @@ def getSteamStats():
                                                 }
                                             </style>
                                             <center>
-                                                <h1>{{ heading }}</h1>
+                                                <h2>{{ heading }}</h2>
                                                     <table>
+                                                        <tr style="font-weight: bold; background-color: #922fad; ">
+
+                                                            <td> Icon </td>
+                                                            <td> Game </td>
+                                                            <td> Playtime </td>
+                                                            <td> Achievements </td>
+                                                        </tr>
                                                         {% for key, value in games.items() %}
                                                             <tr>
                                                             {% for i in value %}
@@ -93,5 +112,5 @@ def getSteamStats():
                                                     </table>
                                             </center>
                                         {% endblock %}
-                                  ''', heading = "Games", games = games)
+                                  ''', heading = "Your Games", games = games)
 
