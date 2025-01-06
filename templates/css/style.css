@@ -1,8 +1,30 @@
+#row1 {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+div {
+	float: left;
+	height: 470px;
+	width: 23%;
+	padding: 0 10px;
+}
+
+#column1 {
+	background-color: #a1edcc;
+}
+
+#column2 {
+	background-color: #a0e9ed;
+	width: 43%;
+}
+
 body {
-	background-color: #e6f2ff;
+	background-color: #170124;
 	color: #333;
-	font-family: Arial, sans-serif;
 	margin: 0;
+	font-family: "Times New Roman", Times, serif;
 	padding: 0;
 }
 
@@ -70,6 +92,3 @@ h2 {
 p {
 	line-height: 1.5;
 }
-
-
-  

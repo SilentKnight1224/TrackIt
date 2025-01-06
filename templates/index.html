@@ -1,35 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>TrackIt!</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-	<header>
-		<h1><center>TrackIt!</center></h1>
-	</header>
-	<nav>
-		<ul>
-			<li><a href="index.html">Home</a></li>
-			<li><a href="About.html">About</a></li>
-			<li><a href="UserGuide.html">User Guide</a></li>
-			<li><a href="LeagueOfLegends.html">League of Legends</a></li>
-			<li><a href="Apex.html">Apex Legends</a></li>
-			<li><a href="Steam.html">Steam</a></li>
-			<li><a href="Mojang.html">Mojang</a></li>
-			<li><a href="Roblox.html">ROBLOX</a></li>
-			<li><a href="Valorant.html">Valorant</a></li>
-			<li><a href="Overwatch.html">Overwatch</a></li>
-			<li><a href="{{ url_for('account.register') }}">Register</a></li>
-		</ul>
-	  </nav>
-	<main>
-		<section>
-			<h2><center>What Is This Application?</center></h2>
-			<p><center>Have you ever been worried about how much time you are spending on these damn video games??? Well now you can use our amazing website called “TrackIt!”. Our tracker gathers the information from your computer to determine how long you are spending playing a given video game for a given time. The information gathered would then be displayed in graphical and numerical ways for any time interval you want. Wanting to quit playing so much or brag to your friends then “TrackIt!” is perfect for you!</center></p>
-		</section>
-    <section>
+{% extends "layout.html" %} {% block body %}
+<main>
+  <section>
     <h2><center>Start Tracking Your Stats Now!</center></h2>
-      <p><center>We have all the data readily available to you, just type in your username for the desired game and out comes your statistics!</center></p>
-		</section>
-  </main>
+    <p>
+      <center>
+        We have all the data readily available to you, just type in your
+        identifiers for the desired game and out comes your statistics!
+      </center>
+    </p>
+  </section>
+</main>
+{% endblock %}

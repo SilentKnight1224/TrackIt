@@ -1,3 +1,4 @@
+.env
 # Ignore virtual environment folder
 .venv/
 
@@ -6,4 +7,5 @@ __pycache__/
 *.pyc
 
 # Ignore environment file
+.env
 .env

@@ -1,7 +1,7 @@
 from flask import ( Blueprint, flash, g, redirect, render_template, request, session, url_for)
 import requests
 from db import get_db
-roblox = Blueprint(__name__, "roblox")
+roblox = Blueprint( "roblox", __name__ )
 
 @roblox.route("Roblox.html")
 def goToRoblox():

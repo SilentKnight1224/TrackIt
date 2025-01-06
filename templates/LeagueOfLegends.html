@@ -1,61 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>TrackIt!</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-	<style>
-		.region-list {
-			float: left;
-			margin-right: 20px;
-		}
-		.blue-button {
-			background-color: #4c9ed9;
-			color: white;
-			padding: 10px 20px;
-			border: none;
-			border-radius: 5px;
-			font-size: 20px;
-			cursor: pointer;
-		  }
-		  .image-container {
-			  margin-top: 20px;
-			  text-align: center;
-		  }
-	</style>
-</head>
-<body>
-	<header>
-		<h1><center>TrackIt!</center></h1>
-	</header>
-	<nav>
-		<ul>
-			<li><a href="index.html">Home</a></li>
-			<li><a href="About.html">About</a></li>
-			<li><a href="UserGuide.html">User Guide</a></li>
-			<li><a href="LeagueOfLegends.html">League of Legends</a></li>
-			<li><a href="Apex.html">Apex Legends</a></li>
-			<li><a href="Steam.html">Steam</a></li>
-			<li><a href="Mojang.html">Mojang</a></li>
-			<li><a href="Roblox.html">ROBLOX</a></li>
-			<li><a href="Valorant.html">Valorant</a></li>
-			<li><a href="Overwatch.html">Overwatch</a></li>
-		</ul>
-	  </nav>
- <main>
-		<section>
-			<h2><center>Welcome to the League of Legends Tracker!</center></h2>
-				<form method="POST" action="{{ url_for('LeagueOfLegends.getLeagueOfLegendsID') }}">		
-					<p><center><label for="user-input">Enter your Summoner Name</label>		
-					<input type="text" id="user-id" name="user-id"></center></p>
-					<p><center><label for="user-input">Enter your Region</label>		
-					<input type="text" id="region" name="region"></center></p>
-					<div style="text-align:center;">
-						<button type="submit" class="blue-button">Submit</button>
-					</div>
-				</form>
-			<div class="image-container"><center><img src="{{ url_for('static', filename='images/lol.jpg') }}" width="500" height="300"></center></div>
-			<h2>Need Help?</h2>
-			<center><button class="blue-button" onclick="window.location.href='UserGuide.html#leagueUserGuide'">Go to League User Guide</button></center>
-</section>
-		
+{% extends 'layout.html' %} {% block body %}
+<main>
+  <style>
+    .region-list {
+      float: left;
+      margin-right: 20px;
+    }
+
+    .blue-button {
+      background-color: #4c9ed9;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .image-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+  <section>
+    <h2>Welcome to the League of Legends Tracker!</h2>
+    <form
+      method="POST"
+      action="{{ url_for('LeagueOfLegends.getLeagueOfLegendsID') }}"
+    >
+      <p>
+        <label for="user-input">Enter your Riot ID: </label>
+        <input type="text" id="user-id" name="user-id" />
+      </p>
+      <p>
+        <label for="user-input">Enter your tag: </label>
+        <input type="text" id="tag" name="tag" />
+      </p>
+      <div style="text-align: center">
+        <button type="submit" class="blue-button">Submit</button>
+      </div>
+    </form>
+    <div class="image-container">
+      <img
+        src="{{ url_for('static', filename='images/lol.jpg') }}"
+        width="500"
+        height="300"
+      />
+    </div>
+  </section>
+  <h2>Need Help?</h2>
+  <button
+    class="blue-button"
+    onclick="window.location.href='{{ url_for('goToUserGuide') }}#leagueUserGuide'"
+  >
+    Go to League User Guide
+  </button>
+  <a href="{{ url_for('LeagueOfLegends.getExample') }}">
+    <button class="blue-button">Example</button>
+  </a>
 </main>
+{% endblock %}
